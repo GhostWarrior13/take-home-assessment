@@ -1,6 +1,6 @@
 # Product Inventory Dashboard
 
-A responsive, high-performance product management interface built with **React (Next.js 16)**, **TypeScript**, and **Tailwind CSS**. This dashboard provides a full CRUD-like experience using browser storage for data persistence.
+A high-performance product management interface built with **React (Next.js 16)**, **TypeScript**, and **Tailwind CSS**. This dashboard provides a full CRUD-like experience using browser storage for data persistence.
 
 ## 🚀 Features
 
@@ -28,7 +28,7 @@ A responsive, high-performance product management interface built with **React (
 
 Based on the project architecture:
 
-- **`app/page.tsx`**: The main entry point. Orchestrates the state between the table and the various modals.
+- **`app/page.tsx`**: Renders the main component.
 - **`components/ProductTable.tsx`**: The heavy-lifter. Contains the filtering/sorting logic and renders the primary data grid.
 - **`components/ProductDetailsModal.tsx`**: Vire product details and manages the "Edit" state. Uses a local `formData` buffer to allow users to discard changes before saving.
 - **`components/NewProductModal.tsx`**: Handles the logic for creating and validating new inventory entries.
