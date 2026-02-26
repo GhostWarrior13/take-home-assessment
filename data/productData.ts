@@ -11,6 +11,11 @@ export interface Product {
   warranty: string;
 }
 
+export interface SortConfig {
+  key: keyof Product | null;
+  direction: 'ascending' | 'descending';
+}
+
 export interface ProductModalProps {
   product: Product | null;
   isOpen: boolean;

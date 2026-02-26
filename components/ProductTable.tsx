@@ -14,15 +14,44 @@ const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [filteredStatus, setFilteredStatus] = useState<string>("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const filteredProducts = productList.filter((product) => {
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      filteredStatus === "all" ||
-      product.status.toLowerCase() === filteredStatus.toLowerCase();
-    return matchesSearch && matchesStatus;
+  const [sortConfig, setSortConfig] = useState({
+    key: "title",
+    direction: "asc",
   });
+  const filteredAndSortedProducts = productList
+    .filter((product) => {
+      const matchesSearch = product.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        filteredStatus === "all" ||
+        product.status.toLowerCase() === filteredStatus.toLowerCase();
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      const key = sortConfig.key;
+      const direction = sortConfig.direction === "asc" ? 1 : -1;
+
+      const valA = (a as Record<string, any>)[key];
+      const valB = (b as Record<string, any>)[key];
+
+      if (typeof valA === "number") {
+        return (valA - valB) * direction;
+      }
+
+      if (typeof valA === "string") {
+        return valA.localeCompare(valB) * direction;
+      }
+
+      return 0;
+    });
+  const requestSort = (key: string) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
 
   // Simulate loading state and error handling when fetching products
   useEffect(() => {
@@ -106,7 +135,15 @@ const ProductTable = () => {
           <table className="w-full text-sm text-left text-gray-500 border-collapse ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-200">
               <tr>
-                <th className="px-6 py-4 font-bold">Product</th>
+                <th
+                  onClick={() => requestSort("title")}
+                  className="px-6 py-4 font-bold"
+                >
+                  {" "}
+                  Product{" "}
+                  {sortConfig.key === "title" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
+                </th>
                 <th className="px-6 py-4 font-bold">Description</th>
                 <th className="px-6 py-4 font-bold">Price</th>
                 <th className="px-6 py-4 font-bold text-center">Status</th>
@@ -115,8 +152,8 @@ const ProductTable = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-200">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
+              {filteredAndSortedProducts.length > 0 ? (
+                filteredAndSortedProducts.map((product) => (
                   <tr
                     key={product.id}
                     className="hover:bg-gray-50 transition-colors cursor-pointer"

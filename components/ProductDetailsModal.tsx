@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Product, ProductModalProps } from "../data/productData";
 import { products as initialProducts } from "../data/productData";
 import { X } from "lucide-react";
